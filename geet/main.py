@@ -1,10 +1,5 @@
-GEET_BANNER = """
-                 _     
-  __ _  ___  ___| |_   
- / _` |/ _ \/ _ \ __|  
-| (_| |  __/  __/ |_   
- \__, |\___|\___|\__|  
- |___/                 
-"""        
+from pyfiglet import Figlet
 
-print(GEET_BANNER)
+
+figlet = Figlet(font='slant')
+print(figlet.renderText('geet'))
