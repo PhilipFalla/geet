@@ -11,7 +11,16 @@ PATH = '/Users/tortolala/Desktop/dirtest/'
 
 def list_files(path: str) -> list:
 
-    return os.listdir(path)
+    files_to_ignore_raw = read_file_by_lines(path + '.geetignore')
+    files_to_ignore = [file_name[:-1] for file_name in files_to_ignore_raw]
+    all_files = os.listdir(path)
+    files = []
+
+    for file in all_files:
+        if file not in files_to_ignore:
+            files.append(file)
+
+    return files
 
 
 def read_file(path: str) -> str:
@@ -104,8 +113,8 @@ def scan_for_modified_files(path: str) -> list:
 
 # print(list_files(PATH))
 # print(read_file(PATH + 'main.py'))
-# print(hash_file(PATH + 'main.py'))
 # print(read_file_by_lines(PATH + 'main.py'))
+# print(hash_file(PATH + 'main.py'))
 # print(get_hash_dict(PATH))
 # print(save_hash_dict(PATH))
 # print(read_current_hash_dict(PATH))
