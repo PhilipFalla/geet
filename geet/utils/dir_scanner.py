@@ -6,14 +6,29 @@ import json
 import hashlib
 
 
-PATH = '/Users/tortolala/Desktop/dirtest/'
+def get_current_path() -> str:
 
+    return  os.getcwd() + '/'
+
+
+def get_tree_files(path: str) -> list:
+
+    root_len = len(get_current_path())
+    tree_files = []
+
+    for root, _, files in os.walk(path, topdown=False):
+        for file in files:
+            tree_files.append(os.path.join(root, file)[root_len:])
+            # TODO: Add scenario for empty dirs (currently not supported)
+
+    return tree_files
+        
 
 def list_files(path: str) -> list:
 
     files_to_ignore_raw = read_file_by_lines(path + '.geetignore')
     files_to_ignore = [file_name[:-1] for file_name in files_to_ignore_raw]
-    all_files = os.listdir(path)
+    all_files = get_tree_files(path)
     files = []
 
     for file in all_files:
@@ -111,6 +126,10 @@ def scan_for_modified_files(path: str) -> list:
     return modified_files
         
 
+PATH = get_current_path()
+
+# print(get_current_path())
+# print(get_tree_files(PATH))
 # print(list_files(PATH))
 # print(read_file(PATH + 'main.py'))
 # print(read_file_by_lines(PATH + 'main.py'))
