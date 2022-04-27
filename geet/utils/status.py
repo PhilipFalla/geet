@@ -1,5 +1,5 @@
 '''
-[Module] Directory Scanner
+[Module] Status command utils.
 '''
 import os
 import json
@@ -26,7 +26,7 @@ def get_tree_files(path: str) -> list:
 
 def list_files(path: str) -> list:
 
-    files_to_ignore_raw = read_file_by_lines(path + '.geetignore')
+    files_to_ignore_raw = read_file_by_lines(path + '.geet/.geetignore')
     files_to_ignore = [file_name[:-1] for file_name in files_to_ignore_raw]
     all_files = get_tree_files(path)
     files = []
@@ -70,7 +70,7 @@ def get_hash_dict(path: str) -> dict:
 
 def save_hash_dict(path: str) -> None:
 
-    with open(path + '.hashdict.json', 'w') as writer:
+    with open(path + '.geet/.hashdict.json', 'w') as writer:
         hash_dict = get_hash_dict(path)
         json.dump(hash_dict, writer)
 
@@ -79,7 +79,7 @@ def save_hash_dict(path: str) -> None:
 
 def read_current_hash_dict(path: str) -> dict:
 
-    with open(path + '.hashdict.json', 'r') as reader:
+    with open(path + '.geet/.hashdict.json', 'r') as reader:
         file = reader.read()
         return json.loads(file)
 
@@ -126,8 +126,7 @@ def scan_for_modified_files(path: str) -> list:
     return modified_files
         
 
-PATH = get_current_path()
-
+# PATH = get_current_path()
 # print(get_current_path())
 # print(get_tree_files(PATH))
 # print(list_files(PATH))
@@ -137,6 +136,6 @@ PATH = get_current_path()
 # print(get_hash_dict(PATH))
 # print(save_hash_dict(PATH))
 # print(read_current_hash_dict(PATH))
-print("New files:", scan_for_new_files(PATH))
-print("Deleted files:", scan_for_deleted_files(PATH))
-print("Modified files:", scan_for_modified_files(PATH))
+# print("New files:", scan_for_new_files(PATH))
+# print("Deleted files:", scan_for_deleted_files(PATH))
+# print("Modified files:", scan_for_modified_files(PATH))
