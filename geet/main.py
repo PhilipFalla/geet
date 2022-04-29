@@ -1,18 +1,25 @@
-from pyfiglet import Figlet
-import argparse
-import sys
-import os
-import time
 import utils.status as status_utils
 import utils.init as init_utils
+from pyfiglet import Figlet
+import click
+import time
+import sys
+import os
 
 
-def print_name():
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
+def banner():
 
     figlet = Figlet(font='slant')
     print(figlet.renderText('geet'))
 
 
+@cli.command()
 def status():
 
     path = status_utils.get_current_path()
@@ -40,8 +47,11 @@ def status():
         print('             added:', file, end='\n')
 
 
+
+@cli.command()
 def init():
 
+    # TODO: add validation of existing geet-repo
     path = status_utils.get_current_path()
     user_input = input('Creating geet repository in {} [press enter to continue]: '.format(path))
     
@@ -60,8 +70,18 @@ def init():
 
     print('Geet repository successfully created.')
 
-# status()
-# init()
+
+@cli.command()
+@click.option('-m', help='Commit message')
+def commit(m):
+    click.echo('Geet commit...')
+    click.echo(m)
 
 
+@cli.command()
+def push():
+    click.echo('Geet push...')
 
+
+if __name__ == '__main__':
+    cli()
