@@ -19,3 +19,8 @@ def get_init_files() -> dict:
     }
 
     return initial_files
+
+
+def file_exists(path: str, name: str) -> bool:
+
+    return os.path.exists(path + name)

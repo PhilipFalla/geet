@@ -1,18 +1,25 @@
-from pyfiglet import Figlet
-import argparse
-import sys
-import os
-import time
 import utils.status as status_utils
 import utils.init as init_utils
+from pyfiglet import Figlet
+import click
+import time
+import sys
+import os
 
 
-def print_name():
+@click.group()
+def cli():
+    pass
+
+
+@cli.command()
+def banner():
 
     figlet = Figlet(font='slant')
     print(figlet.renderText('geet'))
 
 
+@cli.command()
 def status():
 
     path = status_utils.get_current_path()
@@ -40,28 +47,46 @@ def status():
         print('             added:', file, end='\n')
 
 
+@cli.command()
 def init():
 
     path = status_utils.get_current_path()
+    initial_files = init_utils.get_init_files()
+    config_files = list(initial_files)[:2]
+    first_validation = init_utils.file_exists(path, config_files[0])
+    second_validation = init_utils.file_exists(path, config_files[1])
+
+    if first_validation and second_validation:
+        print('Invalid operation: a geet repository already exists in this directory.')
+        return None
+
     user_input = input('Creating geet repository in {} [press enter to continue]: '.format(path))
     
     if user_input != "":
-        print("Canceling...")
+        print('Canceling...')
         sys.exit(0)
  
     print('Initializing...')
     time.sleep(1)
     os.mkdir('.geet')
 
-    initial_files = init_utils.get_init_files()
-
     for file in initial_files:
         init_utils.write_file(file, initial_files[file])
 
     print('Geet repository successfully created.')
 
-# status()
-# init()
+
+@cli.command()
+@click.option('-m', help='Commit message')
+def commit(m):
+    click.echo('Geet commit...')
+    click.echo(m)
 
 
+@cli.command()
+def push():
+    click.echo('Geet push...')
 
+
+if __name__ == '__main__':
+    cli()
