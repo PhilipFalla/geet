@@ -37,14 +37,22 @@ def status():
     ''' 
     print(status_message)
 
+    files_changed = False
+
     for file in deleted_files:
+        files_changed = True
         print('             deleted:', file, end='\n')
     
     for file in modified_files:
+        files_changed = True
         print('             modified:', file, end='\n')
 
     for file in new_files:
+        files_changed = True
         print('             added:', file, end='\n')
+
+    if not files_changed:
+        print('        < There are no changes in the repository... >')
 
 
 @cli.command()
@@ -69,6 +77,7 @@ def init():
     print('Initializing...')
     time.sleep(1)
     os.mkdir('.geet')
+    os.mkdir('.geet/objects')
 
     for file in initial_files:
         init_utils.write_file(file, initial_files[file])
