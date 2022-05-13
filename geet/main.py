@@ -1,4 +1,6 @@
+from utils.data_structures.linked_list import Node
 import utils.status as status_utils
+import utils.commit as commit_utils
 import utils.init as init_utils
 from pyfiglet import Figlet
 import click
@@ -82,6 +84,16 @@ def init():
     for file in initial_files:
         init_utils.write_file(file, initial_files[file])
 
+    # Creates master branch (linked list)
+    branch_master = init_utils.create_branch(path)
+
+    # Creates initial commit
+    commit_tree = commit_utils.create_tree_object(path, "Initial commit") 
+    commit_utils.save_tree_object(path, commit_tree)
+    branch_master.insert_last(Node(commit_tree.name))
+
+    # TODO: Save branch as pickle
+
     print('Geet repository successfully created.')
 
 
@@ -89,12 +101,21 @@ def init():
 @click.option('-m', help='Commit message')
 def commit(m):
     click.echo('Geet commit...')
-    click.echo(m)
+
+    path = status_utils.get_current_path()
+    commit_tree = commit_utils.create_tree_object(path, m) # Creates commit tree object
+    commit_utils.save_tree_object(path, commit_tree) # Saves commit in disk
+
+    # TODO: 1) Read pickle branch 2) Add new commit obj in branch 3) Save pickle branch
+    
+
+    # Añadir commit a la branch (lista linkeada)
 
 
 @cli.command()
-def push():
-    click.echo('Geet push...')
+def log():
+    click.echo('Geet log...')
+    # TODO: 1) Read pickle branch and print it 
 
 
 if __name__ == '__main__':

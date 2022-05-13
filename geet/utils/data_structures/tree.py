@@ -4,13 +4,15 @@ A simple tree structure for storing a directory snapshot.
 
 
 class Node():
-    def __init__(self, data: str):
-        self.data = data
+    def __init__(self, name: str, content: list):
+        self.name = name
+        self.content = content
 
 
 class Tree(): 
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
+        self.message = None
         self.children = []
 
     def insert_child(self, object: any):
@@ -18,11 +20,3 @@ class Tree():
 
     def get_children(self):
         return self.children
-
-
-# commmit_tree = Tree('A')
-# print(commmit_tree.name)
-# print(commmit_tree.get_children())
-# commmit_tree.insert_child('B')
-# commmit_tree.insert_child('C')
-# print(commmit_tree.get_children())

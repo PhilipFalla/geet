@@ -2,6 +2,7 @@
 [Module] Init command utils.
 '''
 import os
+import utils.data_structures.linked_list as linked_list
 
 
 def write_file(name: str, lines: list) -> None:
@@ -13,7 +14,7 @@ def write_file(name: str, lines: list) -> None:
 def get_init_files() -> dict:
 
     initial_files = {
-        '.geet/.geetignore': [".geet/.geetignore", ".geet/.hashdict.json", ".DS_Store\n"],
+        '.geet/.geetignore': [".geet/objects/.DS_Store", ".geet/.geetignore", ".geet/.hashdict.json", ".geet/.DS_Store", ".DS_Store\n"],
         '.geet/.hashdict.json': ["{\"README.md\": \"1ea4b01b49eae1fd044238ae5423222eac5495ce\"}\n"],
         'README.md': ["### Geet", "Fresh geet repository.\n"]
     }
@@ -24,3 +25,10 @@ def get_init_files() -> dict:
 def file_exists(path: str, name: str) -> bool:
 
     return os.path.exists(path + name)
+
+
+def create_branch(path: str) -> object:
+
+    branch_master = linked_list.LinkedList()
+
+    return branch_master
