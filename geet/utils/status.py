@@ -26,6 +26,7 @@ def get_tree_files(path: str) -> list:
 
 def list_files(path: str) -> list:
 
+    # TODO: ignore all commit objects
     files_to_ignore_raw = read_file_by_lines(path + '.geet/.geetignore')
     files_to_ignore = [file_name[:-1] for file_name in files_to_ignore_raw]
     all_files = get_tree_files(path)
