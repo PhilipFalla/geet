@@ -3,8 +3,9 @@ Linked List implementation.
 '''
 
 class Node:
-    def __init__(self, data_param):
-        self.data = data_param
+    def __init__(self, data_param, message_param):
+        self.data = data_param # Commit hash
+        self.message = message_param # Commit message
         self.next = None
 
     def __repr__(self):

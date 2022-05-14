@@ -3,6 +3,7 @@ import utils.status as status_utils
 import utils.commit as commit_utils
 import utils.init as init_utils
 from pyfiglet import Figlet
+import pickle
 import click
 import time
 import sys
@@ -62,11 +63,9 @@ def init():
 
     path = status_utils.get_current_path()
     initial_files = init_utils.get_init_files()
-    config_files = list(initial_files)[:2]
-    first_validation = init_utils.file_exists(path, config_files[0])
-    second_validation = init_utils.file_exists(path, config_files[1])
+    repo_exists = init_utils.file_exists(path, '.geet')
 
-    if first_validation and second_validation:
+    if repo_exists:
         print('Invalid operation: a geet repository already exists in this directory.')
         return None
 
@@ -88,11 +87,14 @@ def init():
     branch_master = init_utils.create_branch(path)
 
     # Creates initial commit
-    commit_tree = commit_utils.create_tree_object(path, "Initial commit") 
+    commit_tree = commit_utils.create_tree_object(path, 'Initial commit') 
     commit_utils.save_tree_object(path, commit_tree)
-    branch_master.insert_last(Node(commit_tree.name))
+    branch_master.insert_last(Node(commit_tree.name, commit_tree.message))
 
-    # TODO: Save branch as pickle
+    # Saves branch as pickle
+    file_name = path + '.geet/branch'
+    with open(file_name, 'wb') as outp:
+        pickle.dump(branch_master, outp, pickle.HIGHEST_PROTOCOL)
 
     print('Geet repository successfully created.')
 
@@ -100,22 +102,51 @@ def init():
 @cli.command()
 @click.option('-m', help='Commit message')
 def commit(m):
-    click.echo('Geet commit...')
 
     path = status_utils.get_current_path()
+    previous_hash_dict = status_utils.read_current_hash_dict(path)
+    current_hash_dict = status_utils.get_hash_dict(path)
+
+    if current_hash_dict == previous_hash_dict:
+        print('\n     < No changes have been done, cannot commit. >')
+        sys.exit(0)
+    
+    status_utils.save_hash_dict(path) # New current hash dict is saved
     commit_tree = commit_utils.create_tree_object(path, m) # Creates commit tree object
     commit_utils.save_tree_object(path, commit_tree) # Saves commit in disk
+    print('Creating commit with hash {}.'.format(commit_tree.name))
+    print('Commit message: {}'.format(commit_tree.message))
+    # Reads pickle and retrieves branch as linked list object
+    branch_path = path + '.geet/branch'
 
-    # TODO: 1) Read pickle branch 2) Add new commit obj in branch 3) Save pickle branch
-    
+    with open(branch_path, 'rb') as file:
+        branch = pickle.load(file)
 
-    # Añadir commit a la branch (lista linkeada)
+    branch.insert_last(Node(commit_tree.name, commit_tree.message)) # Adds new commit to branch
+    # Saves branch as pickle
+    with open(branch_path, 'wb') as outp:
+        pickle.dump(branch, outp, pickle.HIGHEST_PROTOCOL)
 
 
 @cli.command()
 def log():
-    click.echo('Geet log...')
-    # TODO: 1) Read pickle branch and print it 
+
+    path = status_utils.get_current_path()
+    # Reads pickle and retrieves branch as linked list object
+    branch_path = path + '.geet/branch'
+
+    with open(branch_path, 'rb') as file:
+        branch = pickle.load(file)
+    
+    # Print branch from latest to oldest
+    branch.reverse()
+    print('[HEAD]\n')
+
+    for commit in branch:
+        print('Commit hash:', commit.data)
+        print('Commit message:', commit.message, '\n')
+
+    print('[Beginning of time]')
 
 
 if __name__ == '__main__':
