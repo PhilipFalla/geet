@@ -14,7 +14,7 @@ def write_file(name: str, lines: list) -> None:
 def get_init_files() -> dict:
 
     initial_files = {
-        '.geet/.geetignore': [".geet/objects/.DS_Store", ".geet/.geetignore", ".geet/.hashdict.json", ".geet/.DS_Store", ".DS_Store\n"],
+        '.geet/.geetignore': [".DS_Store\n"],
         '.geet/.hashdict.json': ["{\"README.md\": \"1ea4b01b49eae1fd044238ae5423222eac5495ce\"}\n"],
         'README.md': ["### Geet", "Fresh geet repository.\n"]
     }
