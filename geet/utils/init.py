@@ -29,6 +29,6 @@ def file_exists(path: str, name: str) -> bool:
 
 def create_branch(path: str) -> object:
 
-    branch_master = linked_list.LinkedList()
+    branch_main = linked_list.LinkedList()
 
-    return branch_master
+    return branch_main
