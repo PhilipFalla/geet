@@ -31,8 +31,8 @@ def status():
     modified_files = status_utils.scan_for_modified_files(path)
 
     status_message = '''
-    On branch 'master'
-    Your branch is up to date with 'origin/master'.
+    On branch 'main'
+    Your branch is up to date with 'origin/main'.
 
     Uncommited changes:
         (use "geet commit <comment>..." to commit these changes)
@@ -83,18 +83,18 @@ def init():
     for file in initial_files:
         init_utils.write_file(file, initial_files[file])
 
-    # Creates master branch (linked list)
-    branch_master = init_utils.create_branch(path)
+    # Creates main branch (linked list)
+    branch_main = init_utils.create_branch(path)
 
     # Creates initial commit
     commit_tree = commit_utils.create_tree_object(path, 'Initial commit') 
     commit_utils.save_tree_object(path, commit_tree)
-    branch_master.insert_last(Node(commit_tree.name, commit_tree.message))
+    branch_main.insert_last(Node(commit_tree.name, commit_tree.message))
 
     # Saves branch as pickle
     file_name = path + '.geet/branch'
     with open(file_name, 'wb') as outp:
-        pickle.dump(branch_master, outp, pickle.HIGHEST_PROTOCOL)
+        pickle.dump(branch_main, outp, pickle.HIGHEST_PROTOCOL)
 
     print('Geet repository successfully created.')
 
